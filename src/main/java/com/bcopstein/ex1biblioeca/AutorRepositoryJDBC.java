@@ -21,6 +21,19 @@ public class AutorRepositoryJDBC implements AutorRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public <S extends Autor> S save(S autor) {
+        int atualizados = jdbcTemplate.update(
+            "UPDATE autores SET nome = ?, data_nascimento = ? WHERE id = ?",
+            autor.getNome(), autor.getDataNascimento(), autor.getId());
+
+        if (atualizados == 0) {
+            jdbcTemplate.update(
+                "INSERT INTO autores (id, nome, data_nascimento) VALUES (?, ?, ?)",
+                autor.getId(), autor.getNome(), autor.getDataNascimento());
+        }
+        return autor;
+    }
+
     public List<Autor> findAll() {
         return jdbcTemplate.query(
             "SELECT id, nome, data_nascimento FROM autores", autorRowMapper);

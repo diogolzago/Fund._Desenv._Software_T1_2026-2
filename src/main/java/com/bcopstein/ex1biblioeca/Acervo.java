@@ -39,6 +39,7 @@ public class Acervo {
 
 
     public void cadastraLivroNovo(Livro livro){
+        autorRepository.save(livro.getAutor());
         livroRepository.save(livro);
     }
 
